@@ -1213,8 +1213,8 @@ VehicleCameraControl::_requestAllParameters()
 QString
 VehicleCameraControl::_getParamName(const char* param_id)
 {
-    QByteArray bytes(param_id, MAVLINK_MSG_PARAM_VALUE_FIELD_PARAM_ID_LEN);
-    QString parameterName(bytes);
+    // QByteArray bytes(param_id, MAVLINK_MSG_PARAM_VALUE_FIELD_PARAM_ID_LEN);
+    QString parameterName(param_id);
     return parameterName;
 }
 
