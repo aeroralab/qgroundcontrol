@@ -159,6 +159,14 @@ QGCCameraParamIO::_sendParameter()
         strncpy(p.param_id, _fact->name().toStdString().c_str(), MAVLINK_MSG_PARAM_EXT_SET_FIELD_PARAM_ID_LEN);
         memcpy(&p.param_value[0], &union_value.bytes[0], MAVLINK_MSG_PARAM_EXT_SET_FIELD_PARAM_VALUE_LEN);
 
+        qCDebug(CameraIOLog) << "Set camera param:" << p.param_id;
+
+        // TODO temp solution to change mavlink proto version to 2.0
+        if (mavlink_get_proto_version(sharedLink->mavlinkChannel()) == 1) {
+            qCDebug(CameraIOLog) << "Set mavlink proto version to 2.0";
+            mavlink_set_proto_version(sharedLink->mavlinkChannel(), 2);
+        }
+
         mavlink_msg_param_ext_set_encode_chan(
                     static_cast<uint8_t>(_pMavlink->getSystemId()),
                     static_cast<uint8_t>(_pMavlink->getComponentId()),
