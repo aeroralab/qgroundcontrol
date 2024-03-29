@@ -53,6 +53,7 @@ public:
     PhotoCaptureStatus  photoCaptureStatus  () override { return _photoCaptureStatus; }
     PhotoCaptureMode    photoCaptureMode    () override { return _photoCaptureMode; }
     CameraMode          cameraMode          () override { return _cameraMode; }
+    int                 photoCount          () override { return _photoCount; }
     qreal               photoLapse          () override { return _photoLapse; }
     int                 photoLapseCount     () override { return _photoLapseCount; }
 
@@ -139,6 +140,7 @@ private:
     VideoCaptureStatus  _videoCaptureStatus         = VIDEO_CAPTURE_STATUS_STOPPED;
     PhotoCaptureStatus  _photoCaptureStatus         = PHOTO_CAPTURE_IDLE;
     PhotoCaptureMode    _photoCaptureMode           = PHOTO_CAPTURE_SINGLE;
+    int                 _photoCount                 = 0;
     qreal               _photoLapse                 = 1.0;
     int                 _photoLapseCount            = 0;
     VideoManager*       _videoManager               = nullptr;

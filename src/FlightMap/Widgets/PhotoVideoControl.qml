@@ -223,7 +223,7 @@ Rectangle {
                         anchors.leftMargin: _smallMargins
                         anchors.left:       parent.left
                         anchors.top:        parent.top
-                        text:               _activeVehicle ? ('00000' + _activeVehicle.cameraTriggerPoints.count).slice(-5) : "00000"
+                        text:               _activeVehicle ? ('00000' + _camera.photoCount).slice(-5) : "00000"
                         font.pointSize:     ScreenTools.largeFontPointSize
                         visible:            _cameraInPhotoMode
                     }

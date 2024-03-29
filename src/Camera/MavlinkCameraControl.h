@@ -158,6 +158,7 @@ public:
     Q_PROPERTY(PhotoCaptureStatus   photoCaptureStatus      READ photoCaptureStatus                                 NOTIFY photoCaptureStatusChanged)
     Q_PROPERTY(CameraMode           cameraMode              READ cameraMode             WRITE   setCameraMode       NOTIFY cameraModeChanged)
     Q_PROPERTY(StorageStatus        storageStatus           READ storageStatus                                      NOTIFY storageStatusChanged)
+    Q_PROPERTY(int                  photoCount              READ photoCount                                         NOTIFY photoCountChanged)
     Q_PROPERTY(qreal                photoLapse              READ photoLapse             WRITE   setPhotoLapse       NOTIFY photoLapseChanged)
     Q_PROPERTY(int                  photoLapseCount         READ photoLapseCount        WRITE   setPhotoLapseCount  NOTIFY photoLapseCountChanged)
     Q_PROPERTY(PhotoCaptureMode     photoCaptureMode        READ photoCaptureMode       WRITE   setPhotoCaptureMode NOTIFY photoCaptureModeChanged)
@@ -225,6 +226,7 @@ public:
     virtual VideoCaptureStatus videoCaptureStatus         () = 0;
     virtual PhotoCaptureStatus photoCaptureStatus         () = 0;
     virtual PhotoCaptureMode   photoCaptureMode           () = 0;
+    virtual int         photoCount          () = 0;
     virtual qreal       photoLapse          () = 0;
     virtual int         photoLapseCount     () = 0;
     virtual CameraMode  cameraMode          () = 0;
@@ -303,6 +305,7 @@ signals:
     void    videoCaptureStatusChanged   ();
     void    photoCaptureStatusChanged   ();
     void    photoCaptureModeChanged     ();
+    void    photoCountChanged           ();
     void    photoLapseChanged           ();
     void    photoLapseCountChanged      ();
     void    cameraModeChanged           ();

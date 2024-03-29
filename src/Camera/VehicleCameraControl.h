@@ -92,6 +92,7 @@ public:
     virtual VideoCaptureStatus  videoCaptureStatus  ();
     virtual PhotoCaptureStatus  photoCaptureStatus  ();
     virtual PhotoCaptureMode    photoCaptureMode    () { return _photoMode; }
+    virtual int                 photoCount          () { return _photoCount; }
     virtual qreal               photoLapse          () { return _photoLapse; }
     virtual int                 photoLapseCount     () { return _photoLapseCount; }
     virtual CameraMode          cameraMode          () { return _cameraMode; }
@@ -125,7 +126,7 @@ public:
     virtual void        setZoomLevel        (qreal level);
     virtual void        setFocusLevel       (qreal level);
     virtual void        setCameraMode       (CameraMode mode);
-    virtual void        setPhotoCaptureMode        (PhotoCaptureMode mode);
+    virtual void        setPhotoCaptureMode (PhotoCaptureMode mode);
     virtual void        setPhotoLapse       (qreal interval);
     virtual void        setPhotoLapseCount  (int count);
 
@@ -171,6 +172,7 @@ protected:
     virtual void    _setVideoStatus         (VideoCaptureStatus status);
     virtual void    _setPhotoStatus         (PhotoCaptureStatus status);
     virtual void    _setCameraMode          (CameraMode mode);
+    virtual void    _setPhotoCount          (int count);
     virtual void    _requestStreamInfo      (uint8_t streamID);
     virtual void    _requestStreamStatus    (uint8_t streamID);
     virtual void    _requestTrackingStatus  ();
@@ -233,6 +235,7 @@ protected:
     CameraMode                          _cameraMode         = CAM_MODE_UNDEFINED;
     StorageStatus                       _storageStatus      = STORAGE_NOT_SUPPORTED;
     PhotoCaptureMode                    _photoMode          = PHOTO_CAPTURE_SINGLE;
+    int                                 _photoCount         = 0;
     qreal                               _photoLapse         = 1.0;
     int                                 _photoLapseCount    = 0;
     VideoCaptureStatus                  _video_status       = VIDEO_CAPTURE_STATUS_UNDEFINED;

@@ -340,6 +340,14 @@ VehicleCameraControl::_setCameraMode(CameraMode mode)
 
 //-----------------------------------------------------------------------------
 void
+VehicleCameraControl::_setPhotoCount(int count)
+{
+    _photoCount = count;
+    emit photoCountChanged();
+}
+
+//-----------------------------------------------------------------------------
+void
 VehicleCameraControl::toggleCameraMode()
 {
     if(!_resetting) {
@@ -1551,7 +1559,11 @@ VehicleCameraControl::handleCaptureStatus(const mavlink_camera_capture_status_t&
         << "\n\tVideo status:" << captureVideoStatusToStr(cap.video_status)
         << "\n\tInterval:" << cap.image_interval 
         << "\n\tRecording time (ms):" << cap.recording_time_ms
-        << "\n\tCapacity:" << cap.available_capacity;
+        << "\n\tCapacity:" << cap.available_capacity
+        << "\n\tImage count:" << cap.image_count;
+
+    _setPhotoCount(cap.image_count);
+
     //-- Disk Free Space
     uint32_t a = static_cast<uint32_t>(cap.available_capacity);
     if(_storageFree != a) {
