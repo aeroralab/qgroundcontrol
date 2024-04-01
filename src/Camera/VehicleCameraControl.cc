@@ -1204,6 +1204,12 @@ VehicleCameraControl::_requestAllParameters()
     if (!weakLink.expired()) {
         SharedLinkInterfacePtr sharedLink = weakLink.lock();
 
+        // TODO temp solution to change mavlink proto version to 2.0
+        if (mavlink_get_proto_version(sharedLink->mavlinkChannel()) == 1) {
+            qCDebug(CameraIOLog) << "_requestAllParameters set mavlink proto version to 2.0";
+            mavlink_set_proto_version(sharedLink->mavlinkChannel(), 2);
+        }
+
         MAVLinkProtocol* mavlink = qgcApp()->toolbox()->mavlinkProtocol();
         mavlink_message_t msg;
         mavlink_msg_param_ext_request_list_pack_chan(

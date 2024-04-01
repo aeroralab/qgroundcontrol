@@ -36,7 +36,7 @@ QGCCameraParamIO::QGCCameraParamIO(MavlinkCameraControl *control, Fact* fact, Ve
     } else {
         connect(&_paramRequestTimer, &QTimer::timeout, this, &QGCCameraParamIO::_paramRequestTimeout);
     }
-    connect(&_paramWriteTimer,   &QTimer::timeout, this, &QGCCameraParamIO::_paramWriteTimeout);
+    connect(&_paramWriteTimer, &QTimer::timeout, this, &QGCCameraParamIO::_paramWriteTimeout);
     connect(_fact, &Fact::rawValueChanged, this, &QGCCameraParamIO::_factChanged);
     connect(_fact, &Fact::_containerRawValueChanged, this, &QGCCameraParamIO::_containerRawValueChanged);
     _pMavlink = qgcApp()->toolbox()->mavlinkProtocol();
@@ -163,7 +163,7 @@ QGCCameraParamIO::_sendParameter()
 
         // TODO temp solution to change mavlink proto version to 2.0
         if (mavlink_get_proto_version(sharedLink->mavlinkChannel()) == 1) {
-            qCDebug(CameraIOLog) << "Set mavlink proto version to 2.0";
+            qCDebug(CameraIOLog) << "_sendParameter set mavlink proto version to 2.0";
             mavlink_set_proto_version(sharedLink->mavlinkChannel(), 2);
         }
 
@@ -337,6 +337,12 @@ QGCCameraParamIO::paramRequest(bool reset)
     WeakLinkInterfacePtr weakLink = _vehicle->vehicleLinkManager()->primaryLink();
     if (!weakLink.expired()) {
         SharedLinkInterfacePtr sharedLink = weakLink.lock();
+
+        // TODO temp solution to change mavlink proto version to 2.0
+        if (mavlink_get_proto_version(sharedLink->mavlinkChannel()) == 1) {
+            qCDebug(CameraIOLog) << "paramRequest set mavlink proto version to 2.0";
+            mavlink_set_proto_version(sharedLink->mavlinkChannel(), 2);
+        }
 
         char param_id[MAVLINK_MSG_PARAM_EXT_REQUEST_READ_FIELD_PARAM_ID_LEN + 1];
         memset(param_id, 0, sizeof(param_id));
