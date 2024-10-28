@@ -82,17 +82,18 @@ linux {
         DEFINES += __STDC_LIMIT_MACROS
         DEFINES += QGC_GST_TAISYNC_ENABLED
         DEFINES += QGC_GST_MICROHARD_ENABLED 
-        QMAKE_CFLAGS -= -Zc:strictStrings
-        QMAKE_CFLAGS_RELEASE -= -Zc:strictStrings
-        QMAKE_CFLAGS_RELEASE_WITH_DEBUGINFO -= -Zc:strictStrings
-        QMAKE_CXXFLAGS -= -Zc:strictStrings
-        QMAKE_CXXFLAGS_RELEASE -= -Zc:strictStrings
-        QMAKE_CXXFLAGS_RELEASE_WITH_DEBUGINFO -= -Zc:strictStrings
+        QMAKE_CFLAGS -= -Zc:strictStrings -execution-charset:utf-8 -source-charset:utf-8
+        QMAKE_CFLAGS_RELEASE -= -Zc:strictStrings -execution-charset:utf-8 -source-charset:utf-8
+        QMAKE_CFLAGS_RELEASE_WITH_DEBUGINFO -= -Zc:strictStrings -execution-charset:utf-8 -source-charset:utf-8
+        QMAKE_CXXFLAGS -= -Zc:strictStrings -execution-charset:utf-8 -source-charset:utf-8
+        QMAKE_CXXFLAGS_RELEASE -= -Zc:strictStrings -execution-charset:utf-8 -source-charset:utf-8
+        QMAKE_CXXFLAGS_RELEASE_WITH_DEBUGINFO -= -Zc:strictStrings -execution-charset:utf-8 -source-charset:utf-8
         QMAKE_CXXFLAGS_WARN_ON += /WX /W3 \
             /wd4005 \   # silence warnings about macro redefinition, these come from the shapefile code with is external
             /wd4290 \   # ignore exception specifications
             /wd4267 \   # silence conversion from 'size_t' to 'int', possible loss of data, these come from gps drivers shared with px4
-            /wd4100     # unreferenced formal parameter - gst-plugins-good
+            /wd4100 \   # unreferenced formal parameter - gst-plugins-good
+            /wd4819
     } else {
         error("Unsupported Windows toolchain, only Visual Studio 2017 64 bit is supported")
     }
