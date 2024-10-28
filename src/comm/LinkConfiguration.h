@@ -53,9 +53,9 @@ public:
 #ifdef QGC_ENABLE_BLUETOOTH
         TypeBluetooth,  ///< Bluetooth Link
 #endif
-#ifdef QT_DEBUG
+//#ifdef QT_DEBUG
         TypeMock,       ///< Mock Link for Unitesting
-#endif
+//#endif
         TypeLogReplay,
         TypeLast        // Last type value (type >= TypeLast == invalid)
     };

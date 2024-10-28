@@ -48,11 +48,11 @@ public:
 
     // Property accessors
     bool isPX4Flow(void) const { return _isPX4Flow; }
-#ifdef UNITTEST_BUILD
+//#ifdef UNITTEST_BUILD
     bool isMockLink(void);
-#else
-    bool isMockLink(void) { return false; }
-#endif
+//#else
+//    bool isMockLink(void) { return false; }
+//#endif
 
     SharedLinkConfigurationPtr linkConfiguration(void) { return _config; }
 

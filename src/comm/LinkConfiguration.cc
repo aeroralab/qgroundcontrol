@@ -17,9 +17,9 @@
 #ifdef QGC_ENABLE_BLUETOOTH
 #include "BluetoothLink.h"
 #endif
-#ifdef QT_DEBUG
+//#ifdef QT_DEBUG
 #include "MockLink.h"
-#endif
+//#endif
 
 #define LINK_SETTING_ROOT "LinkConfigurations"
 
@@ -88,11 +88,11 @@ LinkConfiguration* LinkConfiguration::createSettings(int type, const QString& na
         case LinkConfiguration::TypeLogReplay:
             config = new LogReplayLinkConfiguration(name);
             break;
-#ifdef QT_DEBUG
+//#ifdef QT_DEBUG
         case LinkConfiguration::TypeMock:
             config = new MockConfiguration(name);
             break;
-#endif
+//#endif
     }
     return config;
 }
@@ -124,11 +124,11 @@ LinkConfiguration* LinkConfiguration::duplicateSettings(LinkConfiguration* sourc
         case TypeLogReplay:
             dupe = new LogReplayLinkConfiguration(qobject_cast<LogReplayLinkConfiguration*>(source));
             break;
-#ifdef QT_DEBUG
+//#ifdef QT_DEBUG
         case TypeMock:
             dupe = new MockConfiguration(qobject_cast<MockConfiguration*>(source));
             break;
-#endif
+//#endif
         case TypeLast:
             break;
     }

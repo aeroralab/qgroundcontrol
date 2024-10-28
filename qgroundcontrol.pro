@@ -776,12 +776,12 @@ HEADERS += \
     src/Joystick/JoystickAndroid.h \
 }
 
-DebugBuild {
+#DebugBuild {
 HEADERS += \
     src/comm/MockLink.h \
     src/comm/MockLinkFTP.h \
     src/comm/MockLinkMissionItemHandler.h \
-}
+#}
 
 WindowsBuild {
     PRECOMPILED_HEADER += src/stable_headers.h
@@ -1032,12 +1032,12 @@ contains (DEFINES, QGC_ENABLE_PAIRING) {
         src/PairingManager/PairingManager.cc \
 }
 
-DebugBuild {
+#DebugBuild {
 SOURCES += \
     src/comm/MockLink.cc \
     src/comm/MockLinkFTP.cc \
     src/comm/MockLinkMissionItemHandler.cc \
-}
+#}
 
 !contains(DEFINES, NO_SERIAL_LINK) {
 SOURCES += \

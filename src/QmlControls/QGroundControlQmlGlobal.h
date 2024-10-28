@@ -32,9 +32,9 @@ class TaisyncManager;
 class MicrohardManager;
 #endif
 
-#ifdef QT_DEBUG
+//#ifdef QT_DEBUG
 #include "MockLink.h"
-#endif
+//#endif
 
 class QGCToolbox;
 class LinkManager;

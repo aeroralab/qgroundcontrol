@@ -33,9 +33,9 @@
 #include "PositionManager.h"
 #endif
 
-#ifdef QT_DEBUG
+//#ifdef QT_DEBUG
 #include "MockLink.h"
-#endif
+//#endif
 
 #include <qmdnsengine/browser.h>
 #include <qmdnsengine/cache.h>
@@ -134,11 +134,11 @@ bool LinkManager::createConnectedLink(SharedLinkConfigurationPtr& config, bool i
     case LinkConfiguration::TypeLogReplay:
         link = std::make_shared<LogReplayLink>(config);
         break;
-#ifdef QT_DEBUG
+//#ifdef QT_DEBUG
     case LinkConfiguration::TypeMock:
         link = std::make_shared<MockLink>(config);
         break;
-#endif
+//#endif
     case LinkConfiguration::TypeLast:
         break;
     }
@@ -331,11 +331,11 @@ void LinkManager::loadLinkConfigurationList()
                             case LinkConfiguration::TypeLogReplay:
                                 link = new LogReplayLinkConfiguration(name);
                                 break;
-#ifdef QT_DEBUG
+//#ifdef QT_DEBUG
                             case LinkConfiguration::TypeMock:
                                 link = new MockConfiguration(name);
                                 break;
-#endif
+//#endif
                             case LinkConfiguration::TypeLast:
                                 break;
                             }

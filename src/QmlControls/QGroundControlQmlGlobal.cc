@@ -120,7 +120,7 @@ bool QGroundControlQmlGlobal::loadBoolGlobalSetting (const QString& key, bool de
 
 void QGroundControlQmlGlobal::startPX4MockLink(bool sendStatusText)
 {
-#ifdef QT_DEBUG
+#if 1 //def QT_DEBUG
     MockLink::startPX4MockLink(sendStatusText);
 #else
     Q_UNUSED(sendStatusText);
@@ -129,7 +129,7 @@ void QGroundControlQmlGlobal::startPX4MockLink(bool sendStatusText)
 
 void QGroundControlQmlGlobal::startGenericMockLink(bool sendStatusText)
 {
-#ifdef QT_DEBUG
+#if 1 //def QT_DEBUG
     MockLink::startGenericMockLink(sendStatusText);
 #else
     Q_UNUSED(sendStatusText);
@@ -138,7 +138,7 @@ void QGroundControlQmlGlobal::startGenericMockLink(bool sendStatusText)
 
 void QGroundControlQmlGlobal::startAPMArduCopterMockLink(bool sendStatusText)
 {
-#ifdef QT_DEBUG
+#if 1 //def QT_DEBUG
     MockLink::startAPMArduCopterMockLink(sendStatusText);
 #else
     Q_UNUSED(sendStatusText);
@@ -147,7 +147,7 @@ void QGroundControlQmlGlobal::startAPMArduCopterMockLink(bool sendStatusText)
 
 void QGroundControlQmlGlobal::startAPMArduPlaneMockLink(bool sendStatusText)
 {
-#ifdef QT_DEBUG
+#if 1 //def QT_DEBUG
     MockLink::startAPMArduPlaneMockLink(sendStatusText);
 #else
     Q_UNUSED(sendStatusText);
@@ -156,7 +156,7 @@ void QGroundControlQmlGlobal::startAPMArduPlaneMockLink(bool sendStatusText)
 
 void QGroundControlQmlGlobal::startAPMArduSubMockLink(bool sendStatusText)
 {
-#ifdef QT_DEBUG
+#if 1 //def QT_DEBUG
     MockLink::startAPMArduSubMockLink(sendStatusText);
 #else
     Q_UNUSED(sendStatusText);
@@ -165,7 +165,7 @@ void QGroundControlQmlGlobal::startAPMArduSubMockLink(bool sendStatusText)
 
 void QGroundControlQmlGlobal::startAPMArduRoverMockLink(bool sendStatusText)
 {
-#ifdef QT_DEBUG
+#if 1 //def QT_DEBUG
     MockLink::startAPMArduRoverMockLink(sendStatusText);
 #else
     Q_UNUSED(sendStatusText);
@@ -174,7 +174,7 @@ void QGroundControlQmlGlobal::startAPMArduRoverMockLink(bool sendStatusText)
 
 void QGroundControlQmlGlobal::stopOneMockLink(void)
 {
-#ifdef QT_DEBUG
+#if 1 //def QT_DEBUG
     QList<SharedLinkInterfacePtr> sharedLinks = _toolbox->linkManager()->links();
 
     for (int i=0; i<sharedLinks.count(); i++) {
