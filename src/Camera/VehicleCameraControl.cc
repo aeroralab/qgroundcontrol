@@ -626,7 +626,7 @@ VehicleCameraControl::formatCard(int id)
                 1);                                     // Do Format
 
             //after format card we need update storage info and capture status
-            QTimer::singleShot(1000, this, &VehicleCameraControl::_requestStorageInfo);
+            QTimer::singleShot(3000, this, &VehicleCameraControl::_requestStorageInfo);
             QTimer::singleShot(1200, this, &VehicleCameraControl::_requestCaptureStatus);
         }
     }
