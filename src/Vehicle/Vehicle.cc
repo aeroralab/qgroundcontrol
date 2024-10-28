@@ -2547,7 +2547,7 @@ void Vehicle::_remoteControlRSSIChanged(uint8_t rssi)
 void Vehicle::virtualTabletJoystickValue(double roll, double pitch, double yaw, double thrust)
 {
     // The following if statement prevents the virtualTabletJoystick from sending values if the standard joystick is enabled
-    if (!_joystickEnabled) {
+    if (!_joystickEnabled || _joystickManager->activeJoystick() == nullptr) {
         sendJoystickDataThreadSafe(
                     static_cast<float>(roll),
                     static_cast<float>(pitch),
