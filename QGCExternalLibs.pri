@@ -262,5 +262,14 @@ contains (DEFINES, DISABLE_ZEROCONF) {
     message("Including support for Zeroconf (Bonjour)")
     DEFINES += QGC_ZEROCONF_ENABLED
 } else {
-    message("Skipping support for Zeroconf (unsupported platform)")
+    #- BONJOUR SDK installed by default under c:/Program Files/Bonjour SDK
+    BONJOUR_SDK_ROOT = "c:/Program Files/Bonjour SDK"
+    exists($$BONJOUR_SDK_ROOT) {
+        message("Include support for Zeroconf")
+        DEFINES += QGC_ZEROCONF_ENABLED
+        INCLUDEPATH += $$BONJOUR_SDK_ROOT/include
+        LIBS += -L$$BONJOUR_SDK_ROOT/Lib/x64 dnssd.lib ws2_32.lib
+    } else {
+        message("Skipping support for Zeroconf (unsupported platform)")
+    }
 }
