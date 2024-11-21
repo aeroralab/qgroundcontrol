@@ -264,6 +264,11 @@ contains (DEFINES, DISABLE_ZEROCONF) {
 } else {
     #- BONJOUR SDK installed by default under c:/Program Files/Bonjour SDK
     BONJOUR_SDK_ROOT = "c:/Program Files/Bonjour SDK"
+
+    !exists($$BONJOUR_SDK_ROOT) {
+        BONJOUR_SDK_ROOT = $$SOURCE_DIR/libs/BonjourSDK/windows
+    }
+
     exists($$BONJOUR_SDK_ROOT) {
         message("Include support for Zeroconf")
         DEFINES += QGC_ZEROCONF_ENABLED
