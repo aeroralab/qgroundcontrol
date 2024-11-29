@@ -5,11 +5,11 @@ on:
     inputs:
         build_type:
           description: 'Enter either Release or Debug'
-          default: 'Debug'
+          default: 'Release'
           required: true
           type: string
         arch:
-            description: 'Enter either x64 or arm64'
+            description: 'Enter either x64 or Arm64'
             default: 'x64'
             required: true
             type: string
@@ -28,7 +28,7 @@ jobs:
       GST_VERSION: 1.22.12
       SCCACHE_GHA_ENABLED: "true"
       BuildType: ${{ fromJSON('["Debug", "Release"]')[ inputs.build_type == 'Release' ] }}
-      Arch: ${{ fromJSON('["x64", "arm64"]')[ inputs.arch == 'arm64' ] }}
+      Arch: ${{ fromJSON('["x64", "Arm64"]')[ inputs.arch == 'Arm64' ] }}
 
     steps:
       - name: Checkout repo
