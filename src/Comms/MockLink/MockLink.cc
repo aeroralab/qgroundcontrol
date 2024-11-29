@@ -18,6 +18,7 @@
 #include <QtCore/QTimer>
 #include <QtCore/QTemporaryFile>
 #include <QtCore/QRandomGenerator>
+#include <QtNetwork/QNetworkProxy>
 
 #include <string.h>
 
@@ -29,22 +30,23 @@ QGC_LOGGING_CATEGORY(MockLinkVerboseLog, "MockLinkVerboseLog")
 
 // Vehicle position is set close to default Gazebo vehicle location. This allows for multi-vehicle
 // testing of a gazebo vehicle and a mocklink vehicle
-#if 1
+#if 0
 double      MockLink::_defaultVehicleLatitude =     47.397;
 double      MockLink::_defaultVehicleLongitude =    8.5455;
 double      MockLink::_defaultVehicleHomeAltitude = 488.056;
 #else
-double      MockLink::_defaultVehicleLatitude =     47.6333022928789;
-double      MockLink::_defaultVehicleLongitude =    -122.08833157994995;
+double      MockLink::_defaultVehicleLatitude =     35.64661905080586;
+double      MockLink::_defaultVehicleLongitude =    139.86909279512847;
 double      MockLink::_defaultVehicleHomeAltitude = 19.0;
 #endif
-int         MockLink::_nextVehicleSystemId =        128;
+int         MockLink::_nextVehicleSystemId =        1;
 
 // The LinkManager is only forward declared in the header, so a static_assert is here instead to ensure we update if the value changes.
 static_assert(LinkManager::invalidMavlinkChannel() == std::numeric_limits<uint8_t>::max(), "update MockLink::_mavlinkAuxChannel");
 
 MockLink::MockLink(SharedLinkConfigurationPtr& config)
     : LinkInterface                         (config)
+    , _socket                               (nullptr)
     , _missionItemHandler                   (this, qgcApp()->toolbox()->mavlinkProtocol())
     , _name                                 ("MockLink")
     , _connected                            (false)
@@ -191,7 +193,38 @@ void MockLink::disconnect(void)
     }
 }
 
+void MockLink::_socketReadyRead()
+{
+    QByteArray databuffer;
+    while (_socket->hasPendingDatagrams()) {
+        QByteArray datagram;
+        datagram.resize(_socket->pendingDatagramSize());
+        QHostAddress sender;
+        quint16 senderPort;
+        _socket->readDatagram(datagram.data(), datagram.size(), &sender, &senderPort);
+        databuffer.append(datagram);
+    }
+    if (databuffer.size()) {
+        emit writeBytesQueuedSignal(databuffer);
+    }
+}
+bool MockLink::_hardwareConnect()
+{
+    _socket = new QUdpSocket(this);
+    _socket->setProxy(QNetworkProxy::NoProxy);
+    QObject::connect(_socket, SIGNAL(readyRead()), this, SLOT(_socketReadyRead()), Qt::DirectConnection);
+    QObject::connect(this, SIGNAL(finished()), _socket, SLOT(deleteLater()), Qt::DirectConnection);
+    return true;
+}
+
 void MockLink::run(void)
+{
+    if (_hardwareConnect()) {
+        _run();
+    }
+}
+
+void MockLink::_run(void)
 {
     QTimer  timer1HzTasks;
     QTimer  timer10HzTasks;
@@ -437,7 +470,7 @@ void MockLink::_sendSysStatus(void)
 
 void MockLink::_sendBatteryStatus(void)
 {
-    if(_battery1PctRemaining > 200) {
+    if(_battery1PctRemaining > 111) {
         _battery1PctRemaining = static_cast<int8_t>(100 - (_runningTime.elapsed() / 1000));
         _battery1TimeRemaining = static_cast<double>(_batteryMaxTimeRemaining) * (static_cast<double>(_battery1PctRemaining) / 100.0);
         if (_battery1PctRemaining > 50) {
@@ -450,7 +483,7 @@ void MockLink::_sendBatteryStatus(void)
             _battery1ChargeState = MAV_BATTERY_CHARGE_STATE_EMERGENCY;
         }
     }
-    if(_battery2PctRemaining > 200) {
+    if(_battery2PctRemaining > 111) {
         _battery2PctRemaining = static_cast<int8_t>(100 - ((_runningTime.elapsed() / 1000) / 2));
         _battery2TimeRemaining = static_cast<double>(_batteryMaxTimeRemaining) * (static_cast<double>(_battery2PctRemaining) / 100.0);
         if (_battery2PctRemaining > 50) {
@@ -546,7 +579,12 @@ void MockLink::respondWithMavlinkMessage(const mavlink_message_t& msg)
 
         int cBuffer = mavlink_msg_to_send_buffer(buffer, &msg);
         QByteArray bytes((char *)buffer, cBuffer);
-        emit bytesReceived(this, bytes);
+        //emit bytesReceived(this, bytes);
+        if (_socket != nullptr) {
+            _socket->writeDatagram(bytes.data(), bytes.size(), QHostAddress("127.0.0.1"), 14550);
+        } else {
+            emit bytesReceived(this, bytes);
+        }
     }
 }
 
@@ -554,7 +592,11 @@ void MockLink::respondWithMavlinkMessage(const mavlink_message_t& msg)
 void MockLink::_writeBytes(const QByteArray &bytes)
 {
     // This prevents the responses to mavlink messages from being sent until the _writeBytes returns.
-    emit writeBytesQueuedSignal(bytes);
+    //emit writeBytesQueuedSignal(bytes);
+    if (_socket == nullptr) {
+        // This prevents the responses to mavlink messages from being sent until the _writeBytes returns.
+        emit writeBytesQueuedSignal(bytes);
+    }
 }
 
 void MockLink::_writeBytesQueued(const QByteArray bytes)
@@ -664,7 +706,7 @@ void MockLink::_handleIncomingMavlinkMsg(const mavlink_message_t &msg)
 void MockLink::_handleHeartBeat(const mavlink_message_t& msg)
 {
     Q_UNUSED(msg);
-    qCDebug(MockLinkLog) << "Heartbeat";
+    //qCDebug(MockLinkLog) << "Heartbeat"; // Disable this anonying debug message
 }
 
 void MockLink::_handleParamMapRC(const mavlink_message_t& msg)

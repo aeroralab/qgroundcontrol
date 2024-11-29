@@ -20,6 +20,7 @@
 #include <QtCore/QElapsedTimer>
 #include <QtCore/QMap>
 #include <QtCore/QMutex>
+#include <QUdpSocket>
 
 Q_DECLARE_LOGGING_CATEGORY(MockLinkLog)
 Q_DECLARE_LOGGING_CATEGORY(MockLinkVerboseLog)
@@ -199,6 +200,7 @@ signals:
 
 private slots:
     // LinkInterface overrides
+    void _socketReadyRead();
     void _writeBytes(const QByteArray &bytes) final;
 
     void _writeBytesQueued      (const QByteArray bytes);
@@ -219,6 +221,7 @@ private:
     void run(void) final;
 
     // MockLink methods
+    void _run                           (void);
     void _sendHeartBeat                 (void);
     void _sendHighLatency2              (void);
     void _handleIncomingNSHBytes        (const char* bytes, int cBytes);
@@ -258,6 +261,7 @@ private:
     void _moveADSBVehicle               (int vehicleIndex);
     void _sendGeneralMetaData           (void);
     void _sendRemoteIDArmStatus         (void);
+    bool _hardwareConnect               (void);
 
     static MockLink* _startMockLinkWorker(QString configName, MAV_AUTOPILOT firmwareType, MAV_TYPE vehicleType, bool sendStatusText, MockConfiguration::FailureMode_t failureMode);
     static MockLink* _startMockLink(MockConfiguration* mockConfig);
@@ -269,6 +273,7 @@ private:
     uint8_t                     _mavlinkAuxChannel              = std::numeric_limits<uint8_t>::max();
     QMutex                      _mavlinkAuxMutex;
 
+    QUdpSocket*                 _socket;
     MockLinkMissionItemHandler  _missionItemHandler;
 
     QString                     _name;
