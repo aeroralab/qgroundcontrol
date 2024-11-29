@@ -31,9 +31,7 @@
 #include "GPSRtk.h"
 #endif
 
-#ifdef QT_DEBUG
 #include "MockLink.h"
-#endif
 
 #ifndef QGC_AIRLINK_DISABLED
 #include "AirLinkLink.h"
@@ -134,11 +132,9 @@ bool LinkManager::createConnectedLink(SharedLinkConfigurationPtr &config)
     case LinkConfiguration::TypeLogReplay:
         link = std::make_shared<LogReplayLink>(config);
         break;
-#ifdef QT_DEBUG
     case LinkConfiguration::TypeMock:
         link = std::make_shared<MockLink>(config);
         break;
-#endif
 #ifndef QGC_AIRLINK_DISABLED
     case LinkConfiguration::AirLink:
         link = std::make_shared<AirLinkLink>(config);
@@ -340,11 +336,9 @@ void LinkManager::loadLinkConfigurationList()
             case LinkConfiguration::TypeLogReplay:
                 link = new LogReplayLinkConfiguration(name);
                 break;
-#ifdef QT_DEBUG
             case LinkConfiguration::TypeMock:
                 link = new MockConfiguration(name);
                 break;
-#endif
 #ifndef QGC_AIRLINK_DISABLED
             case LinkConfiguration::AirLink:
                 link = new AirLinkConfiguration(name);
@@ -524,9 +518,7 @@ QStringList LinkManager::linkTypeStrings() const
 #ifdef QGC_ENABLE_BLUETOOTH
     list += tr("Bluetooth");
 #endif
-#ifdef QT_DEBUG
     list += tr("Mock Link");
-#endif
 #ifndef QGC_AIRLINK_DISABLED
     list += tr("AirLink");
 #endif

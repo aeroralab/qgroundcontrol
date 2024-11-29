@@ -58,9 +58,7 @@
 #include "UTMSPVehicle.h"
 #include "UTMSPManager.h"
 #endif
-#ifdef QT_DEBUG
 #include "MockLink.h"
-#endif
 
 #include <QtCore/QDateTime>
 
@@ -2456,7 +2454,6 @@ int Vehicle::_findMavCommandListEntryIndex(int targetCompId, MAV_CMD command)
 bool Vehicle::_sendMavCommandShouldRetry(MAV_CMD command)
 {
     switch (command) {
-#ifdef QT_DEBUG
     // These MockLink command should be retried so we can create unit tests to test retry code
     case MockLink::MAV_CMD_MOCKLINK_ALWAYS_RESULT_ACCEPTED:
     case MockLink::MAV_CMD_MOCKLINK_ALWAYS_RESULT_FAILED:
@@ -2464,7 +2461,6 @@ bool Vehicle::_sendMavCommandShouldRetry(MAV_CMD command)
     case MockLink::MAV_CMD_MOCKLINK_SECOND_ATTEMPT_RESULT_FAILED:
     case MockLink::MAV_CMD_MOCKLINK_NO_RESPONSE:
         return true;
-#endif
 
         // In general we should not retry any commands. This is for safety reasons. For example you don't want an ARM command
         // to timeout with no response over a noisy link twice and then suddenly have the third try work 6 seconds later. At that

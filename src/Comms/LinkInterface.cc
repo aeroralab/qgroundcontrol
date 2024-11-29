@@ -14,10 +14,7 @@
 #include "MAVLinkSigning.h"
 #include "SettingsManager.h"
 #include "AppSettings.h"
-
-#ifdef QT_DEBUG
 #include "MockLink.h"
-#endif
 
 #include <QtQml/QQmlEngine>
 
