@@ -1,10 +1,10 @@
-name: Windows
+name: Windows Manual
 
 on:
    workflow_dispatch:
     inputs:
         build_type:
-          description: 'Either Release or Debug'
+          description: 'Enter either Release or Debug'
           default: 'Debug'
           required: true
           type: string
