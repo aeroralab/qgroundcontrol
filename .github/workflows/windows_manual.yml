@@ -1,25 +1,13 @@
 name: Windows
 
 on:
-  push:
-    branches:
-      - master
-      - 'Stable*'
-    tags:
-      - 'v*'
-    paths-ignore:
-      - 'android/**'
-      - 'deploy/**'
-      - 'docs/**'
-  pull_request:
-    paths-ignore:
-      - 'android/**'
-      - 'deploy/**'
-      - 'docs/**'
-      - '.github/workflows/docs_deploy.yml'
-      - '.github/workflows/android.yml'
-      - '.github/workflows/linux.yml'
-      - '.github/workflows/macos.yml'
+   workflow_dispatch:
+    inputs:
+        build_type:
+          description: 'Either Release or Debug'
+          default: 'Debug'
+          required: true
+          type: string
 
 jobs:
   build:
@@ -27,7 +15,7 @@ jobs:
 
     strategy:
       matrix:
-        BuildType: [Release]
+        BuildType: ${{ fromJSON('["Release", "Debug"]')[ inputs.build_type == 'Debug' ] }}
         Arch: [x64] # Arm64
 
     defaults:
