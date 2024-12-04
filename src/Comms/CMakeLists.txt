@@ -90,7 +90,7 @@ endif()
 
 ############# ZEROConf
 
-option(QGC_ZEROCONF_ENABLED "Enable ZeroConf Compatibility" OFF)
+option(QGC_ZEROCONF_ENABLED "Enable ZeroConf Compatibility" ON)
 if(QGC_ZEROCONF_ENABLED)
     set(BUILD_DOC OFF CACHE INTERNAL "")
     set(BUILD_EXAMPLES OFF CACHE INTERNAL "")
@@ -105,4 +105,27 @@ if(QGC_ZEROCONF_ENABLED)
 
     target_link_libraries(Comms PRIVATE qmdnsengine)
     target_compile_definitions(Comms PUBLIC QGC_ZEROCONF_ENABLED)
+
+    if(WIN32)
+        if(DEFINED ENV{BONJOUR_SDK_HOME} AND EXISTS $ENV{BONJOUR_SDK_HOME})
+            set(BONJOUR_SDK_PREFIX $ENV{BONJOUR_SDK_HOME})
+        elseif(EXISTS "C:/Program Files/Bonjour SDK")
+            set(BONJOUR_SDK_PREFIX "C:/Program Files/Bonjour SDK")
+        else()
+            set(BONJOUR_SDK_PREFIX ${CMAKE_SOURCE_DIR}/libs/BonjourSDK)
+        endif()
+
+        if(NOT EXISTS ${BONJOUR_SDK_PREFIX})
+            message(FATAL_ERROR "BONJOUR SDK not f ound")
+        else()
+            message("BONJOUR SDK found at ${BONJOUR_SDK_PREFIX}")
+        endif()
+
+        target_include_directories(Comms PUBLIC ${BONJOUR_SDK_PREFIX}/Include)
+        target_link_directories(Comms PUBLIC ${BONJOUR_SDK_PREFIX}/Lib/x64)
+        target_link_libraries(Comms PUBLIC dnssd)
+        ## NOMINMAX is required to disable MAX/MIN define in Windows.h which have
+        ## conflicts with std::min/std::max define in <Algorithm>
+        target_compile_definitions(Comms PUBLIC NOMINMAX)
+    endif()
 endif()
