@@ -32,6 +32,7 @@ ApplicationWindow {
 
     property bool   _utmspSendActTrigger
     property bool   _utmspStartTelemetry
+    property bool   _px4Vehicle
 
     Component.onCompleted: {
         //-- Full screen on mobile or tiny screens
@@ -330,6 +331,22 @@ ApplicationWindow {
                                 if (mainWindow.allowViewSwitch()) {
                                     drawer.close()
                                     mainWindow.showSettingsTool()
+                                }
+                            }
+                        }
+
+                        SubMenuButton {
+                            id:                 mocklinkButton
+                            height:             toolSelectDialog._toolButtonHeight
+                            Layout.fillWidth:   true
+                            text:               qsTr("PX4 Vehicle")
+                            imageResource:      "qrc:/InstrumentValueIcons/drone.svg"
+                            visible:            !_px4Vehicle
+                            onClicked: {
+                                if (mainWindow.allowViewSwitch()) {
+                                    _px4Vehicle = true
+                                    QGroundControl.startPX4MockLink(false)
+                                    mainWindow.closeIndicatorDrawer()
                                 }
                             }
                         }
