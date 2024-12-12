@@ -13,9 +13,7 @@
 
 #include "FactSystemTestBase.h"
 #include "LinkManager.h"
-#ifdef QT_DEBUG
 #include "MockLink.h"
-#endif
 #include "MultiVehicleManager.h"
 #include "QGCApplication.h"
 #include "ParameterManager.h"

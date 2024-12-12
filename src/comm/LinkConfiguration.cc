@@ -17,9 +17,7 @@
 #ifdef QGC_ENABLE_BLUETOOTH
 #include "BluetoothLink.h"
 #endif
-#ifdef QT_DEBUG
 #include "MockLink.h"
-#endif
 #ifndef QGC_AIRLINK_DISABLED
 #include <AirlinkLink.h>
 #endif
@@ -91,11 +89,9 @@ LinkConfiguration* LinkConfiguration::createSettings(int type, const QString& na
         case LinkConfiguration::TypeLogReplay:
             config = new LogReplayLinkConfiguration(name);
             break;
-#ifdef QT_DEBUG
         case LinkConfiguration::TypeMock:
             config = new MockConfiguration(name);
             break;
-#endif
 #ifndef QGC_AIRLINK_DISABLED
         case LinkConfiguration::Airlink:
             config = new AirlinkConfiguration(name);
@@ -132,11 +128,9 @@ LinkConfiguration* LinkConfiguration::duplicateSettings(LinkConfiguration* sourc
         case TypeLogReplay:
             dupe = new LogReplayLinkConfiguration(qobject_cast<LogReplayLinkConfiguration*>(source));
             break;
-#ifdef QT_DEBUG
         case TypeMock:
             dupe = new MockConfiguration(qobject_cast<MockConfiguration*>(source));
             break;
-#endif
 #ifndef QGC_AIRLINK_DISABLED
         case Airlink:
             dupe = new AirlinkConfiguration(qobject_cast<AirlinkConfiguration*>(source));

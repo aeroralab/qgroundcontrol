@@ -29,17 +29,16 @@ qt_add_library(comm STATIC
 	UDPLink.h
 )
 
-if(QGC_BUILD_TESTING)
-	target_sources(comm
-		PRIVATE
-			MockLink.cc
-			MockLink.h
-			MockLinkFTP.cc
-			MockLinkFTP.h
-			MockLinkMissionItemHandler.cc
-			MockLinkMissionItemHandler.h
-	)
-endif()
+# MockLink
+target_sources(comm
+	PRIVATE
+		MockLink.cc
+		MockLink.h
+		MockLinkFTP.cc
+		MockLinkFTP.h
+		MockLinkMissionItemHandler.cc
+		MockLinkMissionItemHandler.h
+)
 
 target_link_libraries(comm
 	PRIVATE

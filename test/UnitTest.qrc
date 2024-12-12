@@ -1,7 +1,5 @@
 <RCC>
     <qresource prefix="/qml">
-        <file alias="MockLink.qml">ui/preferences/MockLink.qml</file>
-        <file alias="MockLinkSettings.qml">ui/preferences/MockLinkSettings.qml</file>
         <file alias="QGroundControl/Controls/MockLinkOptionsDlg.qml">comm/MockLinkOptionsDlg.qml</file>
         <file alias="QGroundControl/Controls/QGCControlDebug.qml">QmlControls/QGCControlDebug.qml</file>
         <file alias="DebugWindow.qml">ui/preferences/DebugWindow.qml</file>

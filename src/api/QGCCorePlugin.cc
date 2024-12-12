@@ -51,9 +51,9 @@ public:
             delete pMAVLink;
         if(pConsole)
             delete pConsole;
-#if defined(QT_DEBUG)
         if(pMockLink)
             delete pMockLink;
+#if defined(QT_DEBUG)
         if(pDebug)
             delete pDebug;
         if(pQmlTest)
@@ -71,8 +71,8 @@ public:
     QmlComponentInfo* pMAVLink                  = nullptr;
     QmlComponentInfo* pConsole                  = nullptr;
     QmlComponentInfo* pHelp                     = nullptr;
-#if defined(QT_DEBUG)
     QmlComponentInfo* pMockLink                 = nullptr;
+#if defined(QT_DEBUG)
     QmlComponentInfo* pDebug                    = nullptr;
     QmlComponentInfo* pQmlTest                  = nullptr;
 #endif
