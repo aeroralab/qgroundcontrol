@@ -38,7 +38,7 @@
 #include <AirlinkLink.h>
 #endif
 
-#ifdef QGC_ZEROCONF_ENABLED
+#if 0 //def QGC_ZEROCONF_ENABLED
 #include <qmdnsengine/browser.h>
 #include <qmdnsengine/cache.h>
 #include <qmdnsengine/mdns.h>
@@ -441,7 +441,7 @@ void LinkManager::_addMAVLinkForwardingLink(void)
     }
 }
 
-#ifdef QGC_ZEROCONF_ENABLED
+#if 0 //def QGC_ZEROCONF_ENABLED
 void LinkManager::_addZeroConfAutoConnectLink(void)
 {
     if (!_autoConnectSettings->autoConnectZeroConf()->rawValue().toBool()) {
@@ -560,7 +560,7 @@ void LinkManager::_updateAutoConnectLinks(void)
 
     _addUDPAutoConnectLink();
     _addMAVLinkForwardingLink();
-#ifdef QGC_ZEROCONF_ENABLED
+#if 0 //def QGC_ZEROCONF_ENABLED
     _addZeroConfAutoConnectLink();
 #endif
 
