@@ -53,7 +53,7 @@ VideoManager::VideoManager(QGCApplication* app, QGCToolbox* toolbox)
 #if !defined(QGC_GST_STREAMING)
     static bool once = false;
     if (!once) {
-        qmlRegisterType<GLVideoItemStub>("org.freedesktop.gstreamer.GLVideoItem", 1, 0, "GstGLVideoItem");
+        qmlRegisterType<GLVideoItemStub>("org.freedesktop.gstreamer.Qt6GLVideoItem", 1, 0, "Qt6GLVideoItem");
         once = true;
     }
 #endif
