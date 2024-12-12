@@ -360,6 +360,19 @@ ApplicationWindow {
                             }
                         }
 
+                        SubMenuButton {
+                            id:                 closeButton
+                            height:             toolSelectDialog._toolButtonHeight
+                            Layout.fillWidth:   true
+                            text:               qsTr("Close %1").arg(QGroundControl.appName)
+                            imageColor:         qgcPal.text
+                            onClicked: {
+                                if (!mainWindow.preventViewSwitch()) {
+                                    mainWindow.finishCloseProcess()
+                                }
+                            }
+                        }
+
                         ColumnLayout {
                             width:                  innerLayout.width
                             spacing:                0
