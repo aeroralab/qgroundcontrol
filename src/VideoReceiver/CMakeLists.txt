@@ -30,4 +30,6 @@ if(GST_FOUND)
             qmlglsink
             Settings
     )
+
+    target_compile_definitions(VideoReceiver PUBLIC QGC_GST_STREAMING)
 endif()
