@@ -349,9 +349,10 @@ ApplicationWindow {
                             Layout.fillWidth:   true
                             text:               qsTr("PX4 Vehicle")
                             imageResource:      "qrc:/InstrumentValueIcons/drone.svg"
+                            imageColor:         qgcPal.text
                             visible:            !_px4Vehicle
                             onClicked: {
-                                if (mainWindow.allowViewSwitch()) {
+                                if (!mainWindow.preventViewSwitch()) {
                                     _px4Vehicle = true
                                     mainWindow.closeIndicatorDrawer()
                                     QGroundControl.startPX4MockLink(false)
