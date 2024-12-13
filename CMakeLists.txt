@@ -168,15 +168,6 @@ if(QGC_BUILD_TESTING)
     list(APPEND QGC_RESOURCES ${CMAKE_SOURCE_DIR}/test/UnitTest.qrc)
 endif()
 
-if(WIN32)
-    list(APPEND QGC_RESOURCES ${CMAKE_SOURCE_DIR}/deploy/windows/QGroundControl.rc)
-elseif(MACOS)
-    set(MACOSX_BUNDLE_ICON_FILE macx.icns)
-    set(app_icon_macos "${CMAKE_SOURCE_DIR}/resources/icons/macx.icns")
-    set_source_files_properties(${app_icon_macos} PROPERTIES MACOSX_PACKAGE_LOCATION "Resources")
-    list(APPEND QGC_RESOURCES ${app_icon_macos})
-endif()
-
 #######################################################
 #               QGroundControl Target
 #######################################################
@@ -202,36 +193,130 @@ if(Qt6LinguistTools_FOUND)
     )
 endif()
 
-if(MACOS)
+if(WIN32)
+    # windows installer files shared with core and custom
+    set(DEPLOY_WIN_FILES
+        "${CMAKE_SOURCE_DIR}/deploy/windows/driver.msi"
+        "${CMAKE_SOURCE_DIR}/deploy/windows/nullsoft_installer.nsi"
+        "${CMAKE_SOURCE_DIR}/deploy/windows/QGroundControl.rc"
+        "${CMAKE_SOURCE_DIR}/deploy/windows/resource.h"
+    )
+    # windows installer files different for core and custom
+    if(EXISTS ${CMAKE_SOURCE_DIR}/custom/deploy/windows/installheader.bmp)
+        list(APPEND DEPLOY_WIN_FILES ${CMAKE_SOURCE_DIR}/custom/deploy/windows/installheader.bmp)
+    else()
+        list(APPEND DEPLOY_WIN_FILES ${CMAKE_SOURCE_DIR}/deploy/windows/installheader.bmp)
+    endif()
+    if(EXISTS ${CMAKE_SOURCE_DIR}/custom/deploy/windows/WindowsQGC.ico)
+        list(APPEND DEPLOY_WIN_FILES ${CMAKE_SOURCE_DIR}/custom/deploy/windows/WindowsQGC.ico)
+    else()
+        list(APPEND DEPLOY_WIN_FILES ${CMAKE_SOURCE_DIR}/deploy/windows/WindowsQGC.ico)
+    endif()
+
+    # Destination directory where files will be copied
+    set(QGC_INSTALLER_SOURCE_WIN "${CMAKE_BINARY_DIR}/deploy/windows")
+    file(MAKE_DIRECTORY ${QGC_INSTALLER_SOURCE_WIN})
+    foreach(FILE ${DEPLOY_WIN_FILES})
+        # filename without the path
+        get_filename_component(FILE_NAME ${FILE} NAME)
+        # re-copy the file if it changes
+        add_custom_command(
+            OUTPUT "${QGC_INSTALLER_SOURCE_WIN}/${FILE_NAME}"
+            COMMAND ${CMAKE_COMMAND} -E copy_if_different "${FILE}" "${QGC_INSTALLER_SOURCE_WIN}/${FILE_NAME}"
+            DEPENDS "${FILE}"  # Depend on the source file so that it re-copies when it changes
+        )
+        list(APPEND QGC_INSTALLER_SOURCE_WIN_FILES "${QGC_INSTALLER_SOURCE_WIN}/${FILE_NAME}")
+    endforeach()
+
+    target_sources(${PROJECT_NAME}
+        PRIVATE
+            ${QGC_INSTALLER_SOURCE_WIN_FILES}
+    )
+    set_target_properties(${PROJECT_NAME}
+        PROPERTIES
+            WIN32_EXECUTABLE TRUE
+            QT_TARGET_RC_ICONS "${CMAKE_BINARY_DIR}/deploy/windows/WindowsQGC.ico"
+    )
+    add_compile_definitions(_USE_MATH_DEFINES)
+elseif(MACOS)
+    set(MACOSX_BUNDLE_ICON_FILE "macx.icns")
+    set(app_icon_macos "${QGC_MACOS_ICON_PATH}/macx.icns")
+    set_source_files_properties(${app_icon_macos}
+        PROPERTIES
+            MACOSX_PACKAGE_LOCATION "Resources"
+    )
+    target_sources(${PROJECT_NAME} PRIVATE ${app_icon_macos})
     set_target_properties(${PROJECT_NAME}
         PROPERTIES
             MACOSX_BUNDLE TRUE
-            MACOSX_BUNDLE_INFO_PLIST ${CMAKE_SOURCE_DIR}/deploy/mac/MacOSXBundleInfo.plist.in
+            MACOSX_BUNDLE_INFO_PLIST "${CMAKE_SOURCE_DIR}/deploy/mac/MacOSXBundleInfo.plist.in"
+            MACOSX_BUNDLE_BUNDLE_NAME "${CMAKE_PROJECT_NAME}"
+            MACOSX_BUNDLE_BUNDLE_VERSION "${PROJECT_VERSION}"
+            MACOSX_BUNDLE_COPYRIGHT "${QGC_APP_COPYRIGHT}"
+            MACOSX_BUNDLE_GUI_IDENTIFIER "${QGC_BUNDLE_ID}"
+            MACOSX_BUNDLE_ICON_FILE "macx.icns"
+            MACOSX_BUNDLE_INFO_STRING "${QGC_APP_DESCRIPTION}"
+            MACOSX_BUNDLE_LONG_VERSION_STRING "${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH}"
+            MACOSX_BUNDLE_SHORT_VERSION_STRING "${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}"
     )
 elseif(IOS)
-    set_target_properties(${PROJECT_NAME}
-       PROPERTIES
-           QT_IOS_LAUNCH_SCREEN ${CMAKE_SOURCE_DIR}/deploy/ios/QGCLaunchScreen.xib
-    )
-elseif(WIN32)
-    set_target_properties(${PROJECT_NAME} PROPERTIES WIN32_EXECUTABLE TRUE)
-elseif(ANDROID)
-    add_android_openssl_libraries(${PROJECT_NAME})
+    enable_language(OBJC)
+
+    set(CMAKE_OSX_ARCHITECTURES "arm64")
+    set(CMAKE_OSX_SYSROOT "iphoneos")
+    set(CMAKE_OSX_DEPLOYMENT_TARGET "14.0")
+    set(CMAKE_XCODE_ATTRIBUTE_IPHONEOS_DEPLOYMENT_TARGET "14.0")
+    set(CMAKE_XCODE_ATTRIBUTE_TARGETED_DEVICE_FAMILY "1,2") # iPhone,iPad
+    set(CMAKE_XCODE_ATTRIBUTE_INFOPLIST_FILE "${CMAKE_CURRENT_SOURCE_DIR}/deploy/ios/iOS-Info.plist")
 
     set_target_properties(${PROJECT_NAME}
         PROPERTIES
-            QT_ANDROID_ABIS ${ANDROID_ABI}
-            QT_ANDROID_MIN_SDK_VERSION 26
-            QT_ANDROID_TARGET_SDK_VERSION 33
-            QT_ANDROID_PACKAGE_SOURCE_DIR ${CMAKE_SOURCE_DIR}/android
-            QT_ANDROID_VERSION_NAME ${APP_VERSION_STR}
-            # QT_ANDROID_VERSION_CODE 5.0
-            QT_QML_ROOT_PATH ${CMAKE_SOURCE_DIR}
+            QT_IOS_LAUNCH_SCREEN ${CMAKE_SOURCE_DIR}/deploy/ios/QGCLaunchScreen.xib
+            XCODE_ATTRIBUTE_PRODUCT_BUNDLE_IDENTIFIER "org.mavlink.qgroundcontrol"
+            XCODE_ATTRIBUTE_PRODUCT_NAME ${CMAKE_PROJECT_NAME}
+            XCODE_ATTRIBUTE_CURRENT_PROJECT_VERSION ${CMAKE_PROJECT_VERSION}
+            XCODE_ATTRIBUTE_MARKETING_VERSION ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
+            XCODE_ATTRIBUTE_ASSETCATALOG_COMPILER_APPICON_NAME "AppIcon"
+            XCODE_ATTRIBUTE_IPHONEOS_DEPLOYMENT_TARGET "14.0"
+            XCODE_ATTRIBUTE_TARGETED_DEVICE_FAMILY "1,2" # iPhone,iPad
+            XCODE_ATTRIBUTE_INFOPLIST_KEY_CFBundleDisplayName ${CMAKE_PROJECT_NAME}
+            XCODE_ATTRIBUTE_INFOPLIST_KEY_LSApplicationCategoryType "public.app-category.mycategory"
+            XCODE_ATTRIBUTE_GCC_GENERATE_DEBUGGING_SYMBOLS "YES"
     )
+elseif(ANDROID)
+    FetchContent_Declare(android_openssl
+        DOWNLOAD_EXTRACT_TIMESTAMP true
+        URL https://github.com/KDAB/android_openssl/archive/refs/heads/master.zip
+    )
+    FetchContent_MakeAvailable(android_openssl)
+    include(${android_openssl_SOURCE_DIR}/android_openssl.cmake)
+    add_android_openssl_libraries(${PROJECT_NAME})
 
-    if(CMAKE_BUILD_TYPE STREQUAL "Release" AND ANDROID_KEYSTORE_PASSWORD)
-        set(QT_ANDROID_SIGN_APK TRUE)
+    set(ANDROID_PLATFORM_ARCHITECTURE_CODE)
+    if(${ANDROID_ABI} STREQUAL "armeabi-v7a")
+        set(ANDROID_PLATFORM_ARCHITECTURE_CODE "032")
+    elseif(${ANDROID_ABI} STREQUAL "arm64-v8a")
+        set(ANDROID_PLATFORM_ARCHITECTURE_CODE "064")
+    elseif(${ANDROID_ABI} STREQUAL "x86")
+        set(ANDROID_PLATFORM_ARCHITECTURE_CODE "132")
+    elseif(${ANDROID_ABI} STREQUAL "x86_64")
+        set(ANDROID_PLATFORM_ARCHITECTURE_CODE "164")
     endif()
+    set(ANDROID_VERSION_CODE "${ANDROID_PLATFORM_ARCHITECTURE_CODE}${PROJECT_VERSION_MAJOR}${PROJECT_VERSION_MINOR}")
+
+    set_target_properties(${PROJECT_NAME}
+        PROPERTIES
+            # QT_ANDROID_ABIS ${ANDROID_ABI}
+            QT_ANDROID_MIN_SDK_VERSION 25
+            QT_ANDROID_TARGET_SDK_VERSION 35
+            QT_ANDROID_PACKAGE_SOURCE_DIR ${CMAKE_SOURCE_DIR}/android
+            QT_ANDROID_VERSION_NAME ${CMAKE_PROJECT_VERSION}
+            QT_ANDROID_VERSION_CODE ${ANDROID_VERSION_CODE}
+            # QT_QML_ROOT_PATH ${CMAKE_SOURCE_DIR}
+    )
+    # get_target_property(QGC_ANDROID_DEPLOY_FILE ${PROJECT_NAME} QT_ANDROID_DEPLOYMENT_SETTINGS_FILE)
+elseif(LINUX)
+
 endif()
 
 target_link_libraries(${PROJECT_NAME} PRIVATE qgc)
@@ -288,4 +373,8 @@ if(LINUX)
         DESTINATION ${CMAKE_INSTALL_DATADIR}/metainfo/
     )
     install(SCRIPT "${CMAKE_SOURCE_DIR}/cmake/CreateAppImage.cmake")
+elseif(WIN32)
+    install(SCRIPT "${CMAKE_SOURCE_DIR}/cmake/CreateWinInstaller.cmake")
+elseif(MACOS)
+    install(SCRIPT "${CMAKE_SOURCE_DIR}/cmake/CreateMacDMG.cmake")
 endif()
