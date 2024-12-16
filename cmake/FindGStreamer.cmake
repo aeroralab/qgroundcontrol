@@ -16,21 +16,21 @@ else()
 endif()
 
 set(GST_TARGET_PLUGINS
-    gstcoreelements
-    gstplayback
-    gstudp
-    gstrtp
-    gstrtsp
-    gstx264
-    gstlibav
-    gstsdpelem
-    gstvideoparsersbad
-    gstrtpmanager
-    gstisomp4
-    gstmatroska
-    gstmpegtsdemux
-    gstopengl
-    gsttcp
+	gstcoreelements
+	gstplayback
+	gstudp
+	gstrtp
+	gstrtsp
+	gstx264
+	gstlibav
+	gstsdpelem
+	gstvideoparsersbad
+	gstrtpmanager
+	gstisomp4
+	gstmatroska
+	gstmpegtsdemux
+	gstopengl
+	gsttcp
 )
 if(ANDROID)
 	list(APPEND GST_TARGET_PLUGINS gstandroidmedia)
@@ -67,13 +67,13 @@ if(NOT GSTREAMER_ROOT)
 	elseif(ANDROID)
 		set(ANDROID_GSTREAMER_ROOT ${CMAKE_SOURCE_DIR}/gstreamer-1.0-android-universal-${GST_TARGET_VERSION})
 		if(${ANDROID_ABI} STREQUAL armeabi-v7a)
-            set(GSTREAMER_ROOT ${ANDROID_GSTREAMER_ROOT}/armv7)
+			set(GSTREAMER_ROOT ${ANDROID_GSTREAMER_ROOT}/armv7)
         elseif(${ANDROID_ABI} STREQUAL arm64-v8a)
-            set(GSTREAMER_ROOT ${ANDROID_GSTREAMER_ROOT}/arm64)
+			set(GSTREAMER_ROOT ${ANDROID_GSTREAMER_ROOT}/arm64)
         elseif(${ANDROID_ABI} STREQUAL x86)
-            set(GSTREAMER_ROOT ${ANDROID_GSTREAMER_ROOT}/x86)
+			set(GSTREAMER_ROOT ${ANDROID_GSTREAMER_ROOT}/x86)
         elseif(${ANDROID_ABI} STREQUAL x86_64)
-            set(GSTREAMER_ROOT ${ANDROID_GSTREAMER_ROOT}/x86_64)
+			set(GSTREAMER_ROOT ${ANDROID_GSTREAMER_ROOT}/x86_64)
         endif()
 	endif()
 	cmake_print_variables(GSTREAMER_ROOT)
@@ -126,16 +126,16 @@ if(PkgConfig_FOUND)
 			target_link_libraries(qmlglsink PUBLIC PkgConfig::GST)
 			target_include_directories(qmlglsink PUBLIC ${GSTREAMER_ROOT}/include/gstreamer-1.0)
 			message(STATUS "GStreamer version: ${GST_gstreamer-1.0_VERSION}")
-		    message(STATUS "GStreamer prefix: ${GST_gstreamer-1.0_PREFIX}")
-		    message(STATUS "GStreamer include dir: ${GST_gstreamer-1.0_INCLUDEDIR}")
-		    message(STATUS "GStreamer libdir: ${GST_gstreamer-1.0_LIBDIR}")
+			message(STATUS "GStreamer prefix: ${GST_gstreamer-1.0_PREFIX}")
+			message(STATUS "GStreamer include dir: ${GST_gstreamer-1.0_INCLUDEDIR}")
+			message(STATUS "GStreamer libdir: ${GST_gstreamer-1.0_LIBDIR}")
 			if(GST_STATIC_BUILD)
-		        target_link_libraries(qmlglsink PUBLIC ${GST_STATIC_LINK_LIBRARIES})
-	    		target_link_directories(qmlglsink PUBLIC ${GST_STATIC_LIBRARY_DIRS})
-		        target_link_options(qmlglsink PUBLIC ${GST_STATIC_LDFLAGS} ${GST_STATIC_LDFLAGS_OTHER})
-		        target_compile_options(qmlglsink PUBLIC ${GST_STATIC_CFLAGS} ${GST_STATIC_CFLAGS_OTHER})
-	    		target_include_directories(qmlglsink PUBLIC ${GST_STATIC_INCLUDE_DIRS})
-	    		if(ANDROID)
+				target_link_libraries(qmlglsink PUBLIC ${GST_STATIC_LINK_LIBRARIES})
+				target_link_directories(qmlglsink PUBLIC ${GST_STATIC_LIBRARY_DIRS})
+				target_link_options(qmlglsink PUBLIC ${GST_STATIC_LDFLAGS} ${GST_STATIC_LDFLAGS_OTHER})
+				target_compile_options(qmlglsink PUBLIC ${GST_STATIC_CFLAGS} ${GST_STATIC_CFLAGS_OTHER})
+				target_include_directories(qmlglsink PUBLIC ${GST_STATIC_INCLUDE_DIRS})
+				if(ANDROID)
 					target_link_options(PkgConfig::GST INTERFACE "-Wl,-Bsymbolic")
 				endif()
 				list(REMOVE_DUPLICATES GST_STATIC_LIBRARIES)
@@ -146,28 +146,28 @@ if(PkgConfig_FOUND)
 				list(REMOVE_DUPLICATES GST_STATIC_LDFLAGS_OTHER)
 				list(REMOVE_DUPLICATES GST_STATIC_CFLAGS)
 				list(REMOVE_DUPLICATES GST_STATIC_CFLAGS_OTHER)
-			    message(VERBOSE "GStreamer static libs: ${GST_STATIC_LIBRARIES}")
-			    message(VERBOSE "GStreamer static link libs: ${GST_STATIC_LINK_LIBRARIES}")
-			    message(VERBOSE "GStreamer static link dirs: ${GST_STATIC_LIBRARY_DIRS}")
-			    message(VERBOSE "GStreamer static include dirs: ${GST_STATIC_INCLUDE_DIRS}")
-			    message(VERBOSE "GStreamer static ldflags: ${GST_STATIC_LDFLAGS}")
-			    message(VERBOSE "GStreamer static ldflags other: ${GST_STATIC_LDFLAGS_OTHER}")
-			    message(VERBOSE "GStreamer static cflags: ${GST_STATIC_CFLAGS}")
-			    message(VERBOSE "GStreamer static cflags other: ${GST_STATIC_CFLAGS_OTHER}")
-	    	else()
-		        target_link_libraries(qmlglsink PUBLIC ${GST_LINK_LIBRARIES})
-	    		target_link_directories(qmlglsink PUBLIC ${GST_LIBRARY_DIRS})
-		        target_link_options(qmlglsink PUBLIC ${GST_LDFLAGS} ${GST_LDFLAGS_OTHER})
-		        target_compile_options(qmlglsink PUBLIC ${GST_CFLAGS} ${GST_CFLAGS_OTHER})
-	    		target_include_directories(qmlglsink PUBLIC ${GST_INCLUDE_DIRS})
-	    		if(WIN32)
-	    			cmake_path(CONVERT "${GSTREAMER_ROOT}/bin/*.dll" TO_CMAKE_PATH_LIST GST_WIN_BINS_PATH)
-	    			file(GLOB GST_WIN_BINS ${GST_WIN_BINS_PATH})
-		    		cmake_print_variables(GST_WIN_BINS_PATH GST_WIN_BINS)
-		    		# TODO: Only install needed libs
-		    		install(FILES ${GST_WIN_BINS} DESTINATION ${CMAKE_INSTALL_BINDIR})
+				message(VERBOSE "GStreamer static libs: ${GST_STATIC_LIBRARIES}")
+				message(VERBOSE "GStreamer static link libs: ${GST_STATIC_LINK_LIBRARIES}")
+				message(VERBOSE "GStreamer static link dirs: ${GST_STATIC_LIBRARY_DIRS}")
+				message(VERBOSE "GStreamer static include dirs: ${GST_STATIC_INCLUDE_DIRS}")
+				message(VERBOSE "GStreamer static ldflags: ${GST_STATIC_LDFLAGS}")
+				message(VERBOSE "GStreamer static ldflags other: ${GST_STATIC_LDFLAGS_OTHER}")
+				message(VERBOSE "GStreamer static cflags: ${GST_STATIC_CFLAGS}")
+				message(VERBOSE "GStreamer static cflags other: ${GST_STATIC_CFLAGS_OTHER}")
+			else()
+				target_link_libraries(qmlglsink PUBLIC ${GST_LINK_LIBRARIES})
+				target_link_directories(qmlglsink PUBLIC ${GST_LIBRARY_DIRS})
+				target_link_options(qmlglsink PUBLIC ${GST_LDFLAGS} ${GST_LDFLAGS_OTHER})
+				target_compile_options(qmlglsink PUBLIC ${GST_CFLAGS} ${GST_CFLAGS_OTHER})
+				target_include_directories(qmlglsink PUBLIC ${GST_INCLUDE_DIRS})
+				if(WIN32)
+					cmake_path(CONVERT "${GSTREAMER_ROOT}/bin/*.dll" TO_CMAKE_PATH_LIST GST_WIN_BINS_PATH)
+					file(GLOB GST_WIN_BINS ${GST_WIN_BINS_PATH})
+					cmake_print_variables(GST_WIN_BINS_PATH GST_WIN_BINS)
+					# TODO: Only install needed libs
+					install(FILES ${GST_WIN_BINS} DESTINATION ${CMAKE_INSTALL_BINDIR})
 		    	endif()
-		    	list(REMOVE_DUPLICATES GST_LIBRARIES)
+				list(REMOVE_DUPLICATES GST_LIBRARIES)
 				list(REMOVE_DUPLICATES GST_LINK_LIBRARIES)
 				list(REMOVE_DUPLICATES GST_LIBRARY_DIRS)
 				list(REMOVE_DUPLICATES GST_LDFLAGS)
@@ -175,32 +175,32 @@ if(PkgConfig_FOUND)
 				list(REMOVE_DUPLICATES GST_INCLUDE_DIRS)
 				list(REMOVE_DUPLICATES GST_CFLAGS)
 				list(REMOVE_DUPLICATES GST_CFLAGS_OTHER)
-			    message(VERBOSE "GStreamer libs: ${GST_LIBRARIES}")
-			    message(VERBOSE "GStreamer link libs: ${GST_LINK_LIBRARIES}")
-			    message(VERBOSE "GStreamer link dirs: ${GST_LIBRARY_DIRS}")
-			    message(VERBOSE "GStreamer ldflags: ${GST_LDFLAGS}")
-			    message(VERBOSE "GStreamer ldflags other: ${GST_LDFLAGS_OTHER}")
-			    message(VERBOSE "GStreamer include dirs: ${GST_INCLUDE_DIRS}")
-			    message(VERBOSE "GStreamer cflags: ${GST_CFLAGS}")
-			    message(VERBOSE "GStreamer cflags other: ${GST_CFLAGS_OTHER}")
-	    	endif()
+				message(VERBOSE "GStreamer libs: ${GST_LIBRARIES}")
+				message(VERBOSE "GStreamer link libs: ${GST_LINK_LIBRARIES}")
+				message(VERBOSE "GStreamer link dirs: ${GST_LIBRARY_DIRS}")
+				message(VERBOSE "GStreamer ldflags: ${GST_LDFLAGS}")
+				message(VERBOSE "GStreamer ldflags other: ${GST_LDFLAGS_OTHER}")
+				message(VERBOSE "GStreamer include dirs: ${GST_INCLUDE_DIRS}")
+				message(VERBOSE "GStreamer cflags: ${GST_CFLAGS}")
+				message(VERBOSE "GStreamer cflags other: ${GST_CFLAGS_OTHER}")
+			endif()
 		endif()
 	else()
 		message(WARNING "Gstreamer Not Found")
-    endif()
+	endif()
 else()
 	find_library(GSTREAMER NAMES gstreamer-1.0 HINTS ${GSTREAMER_ROOT}/lib)
 	if(GSTREAMER)
-        target_link_libraries(qmlglsink
-        	PUBLIC
-        		${GSTREAMER_ROOT}/lib/gstreamer-1.0.lib
-        		${GSTREAMER_ROOT}/lib/gstgl-1.0.lib
-        		${GSTREAMER_ROOT}/lib/gstvideo-1.0.lib
-        		${GSTREAMER_ROOT}/lib/gstbase-1.0.lib
-        		${GSTREAMER_ROOT}/lib/glib-2.0.lib
-        		${GSTREAMER_ROOT}/lib/intl.lib
-        		${GSTREAMER_ROOT}/lib/gobject-2.0.lib
-        )
+		target_link_libraries(qmlglsink
+			PUBLIC
+				${GSTREAMER_ROOT}/lib/gstreamer-1.0.lib
+				${GSTREAMER_ROOT}/lib/gstgl-1.0.lib
+				${GSTREAMER_ROOT}/lib/gstvideo-1.0.lib
+				${GSTREAMER_ROOT}/lib/gstbase-1.0.lib
+				${GSTREAMER_ROOT}/lib/glib-2.0.lib
+				${GSTREAMER_ROOT}/lib/intl.lib
+				${GSTREAMER_ROOT}/lib/gobject-2.0.lib
+		)
 
 		# find_path(GSTREAMER_INCLUDE_DIR gst/gst.h)
 		target_include_directories(qmlglsink
@@ -224,6 +224,6 @@ else()
 		cmake_print_variables(GST_WIN_LIBS_PATH GST_WIN_LIBS)
 		install(FILES ${GST_WIN_LIBS} DESTINATION ${CMAKE_INSTALL_LIBDIR})
 
-                set(GST_FOUND TRUE CACHE BOOL "Force to enable GStreamer streaming" FORCE)
+        set(GST_FOUND TRUE CACHE BOOL "Force to enable GStreamer streaming" FORCE)
 	endif()
 endif()
