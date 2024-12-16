@@ -164,8 +164,12 @@ if(PkgConfig_FOUND)
 					cmake_path(CONVERT "${GSTREAMER_ROOT}/bin/*.dll" TO_CMAKE_PATH_LIST GST_WIN_BINS_PATH)
 					file(GLOB GST_WIN_BINS ${GST_WIN_BINS_PATH})
 					cmake_print_variables(GST_WIN_BINS_PATH GST_WIN_BINS)
-					# TODO: Only install needed libs
 					install(FILES ${GST_WIN_BINS} DESTINATION ${CMAKE_INSTALL_BINDIR})
+
+					cmake_path(CONVERT "${GSTREAMER_ROOT}/lib/gstreamer-1.0/*.dll" TO_CMAKE_PATH_LIST GST_WIN_LIBS_PATH)
+					file(GLOB GST_WIN_LIBS ${GST_WIN_LIBS_PATH})
+					cmake_print_variables(GST_WIN_LIBS_PATH GST_WIN_LIBS)
+                                        install(FILES ${GST_WIN_LIBS} DESTINATION ${CMAKE_INSTALL_LIBDIR}/gstreamer-1.0)
 		    	endif()
 				list(REMOVE_DUPLICATES GST_LIBRARIES)
 				list(REMOVE_DUPLICATES GST_LINK_LIBRARIES)
@@ -212,18 +216,20 @@ else()
 				${GSTREAMER_ROOT}/lib/glib-2.0/include
 		)
 
-		# TODO: Only install needed libs
+		if(WIN32)
+			# TODO: Only install needed libs
 
-		cmake_path(CONVERT "${GSTREAMER_ROOT}/bin/*.dll" TO_CMAKE_PATH_LIST GST_WIN_BINS_PATH)
-		file(GLOB GST_WIN_BINS ${GST_WIN_BINS_PATH})
-		cmake_print_variables(GST_WIN_BINS_PATH GST_WIN_BINS)
-		install(FILES ${GST_WIN_BINS} DESTINATION ${CMAKE_INSTALL_BINDIR})
+			cmake_path(CONVERT "${GSTREAMER_ROOT}/bin/*.dll" TO_CMAKE_PATH_LIST GST_WIN_BINS_PATH)
+			file(GLOB GST_WIN_BINS ${GST_WIN_BINS_PATH})
+			cmake_print_variables(GST_WIN_BINS_PATH GST_WIN_BINS)
+			install(FILES ${GST_WIN_BINS} DESTINATION ${CMAKE_INSTALL_BINDIR})
 
-		cmake_path(CONVERT "${GSTREAMER_ROOT}/lib/gstreamer-1.0/*.dll" TO_CMAKE_PATH_LIST GST_WIN_LIBS_PATH)
-		file(GLOB GST_WIN_LIBS ${GST_WIN_LIBS_PATH})
-		cmake_print_variables(GST_WIN_LIBS_PATH GST_WIN_LIBS)
-		install(FILES ${GST_WIN_LIBS} DESTINATION ${CMAKE_INSTALL_LIBDIR})
+			cmake_path(CONVERT "${GSTREAMER_ROOT}/lib/gstreamer-1.0/*.dll" TO_CMAKE_PATH_LIST GST_WIN_LIBS_PATH)
+			file(GLOB GST_WIN_LIBS ${GST_WIN_LIBS_PATH})
+			cmake_print_variables(GST_WIN_LIBS_PATH GST_WIN_LIBS)
+                        install(FILES ${GST_WIN_LIBS} DESTINATION ${CMAKE_INSTALL_LIBDIR}/gstreamer-1.0)
 
-        set(GST_FOUND TRUE CACHE BOOL "Force to enable GStreamer streaming" FORCE)
+        	set(GST_FOUND TRUE CACHE BOOL "Force to enable GStreamer streaming" FORCE)
+        endif()
 	endif()
 endif()
