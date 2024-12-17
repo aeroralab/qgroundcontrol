@@ -770,6 +770,8 @@ VideoManager::_restartVideo(unsigned id)
         return;
     }
 
+    _updateSettings(id);
+
     qCDebug(VideoManagerLog) << "Restart video streaming"  << id;
 
     if (_videoReceiverData[id].started) {
