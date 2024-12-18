@@ -117,6 +117,7 @@ static void _setGstEnvVars()
     _qgcputenv("GST_PLUGIN_PATH", currentDir, "/../Frameworks/GStreamer.framework/Versions/1.0/lib/gstreamer-1.0");
     _qgcputenv("GTK_PATH", currentDir, "/../Frameworks/GStreamer.framework/Versions/1.0");
 #elif defined(Q_OS_WIN)
+#if 0 //// disable following settings on Windows to avoid gst_element_factory_make failure
     _qgcputenv("GST_REGISTRY_REUSE_PLUGIN_SCANNER", "no");
     _qgcputenv("GST_PLUGIN_SCANNER", currentDir, "/../libexec/gstreamer-1.0/gst-plugin-scanner");
     _qgcputenv("GST_PTP_HELPER_1_0", currentDir, "/../libexec/gstreamer-1.0/gst-ptp-helper");
@@ -125,6 +126,7 @@ static void _setGstEnvVars()
     _qgcputenv("GST_PLUGIN_SYSTEM_PATH", currentDir, "/../lib/gstreamer-1.0");
     _qgcputenv("GST_PLUGIN_PATH_1_0", currentDir, "/../lib/gstreamer-1.0");
     _qgcputenv("GST_PLUGIN_PATH", currentDir, "/../lib/gstreamer-1.0");
+#endif
 #endif
 }
 
